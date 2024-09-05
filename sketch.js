@@ -1,114 +1,55 @@
-var garden,rabbit,apple,orangeL,redL;
-var gardenImg,rabbitImg,carrotImg,orangeImg,redImg;
-
+var path,boy, leftBoundary,rightBoundary;
+var pathImg,boyImg;
+var i;
 
 function preload(){
-  gardenImg = loadImage("garden.png");
-  rabbitImg = loadImage("rabbit.png");
-  appleImg = loadImage("apple.png");
-  orangeImg = loadImage("orangeLeaf.png");
-  redImg = loadImage("redImage.png");
+  //loadImage de path (camino)
+  pathImg=loadImage("path.png");
+  //loadAnimation de boy (niño)
+ boyImg=loadAnimation("Runner-1.png","Runner-2.png");
 }
-
 
 function setup(){
   
   createCanvas(400,400);
-//Mover fondo
-garden=createSprite(200,200);
-garden.addImage(gardenImg);
+ //crear sprite de path (camino) 
+ path=createSprite(200,20,400,400);
+//agregar imagen de path
+path.addImage("path",pathImg)
+//Hacer que la pista sea un fondo en movimiento al darle velocidad Y.
+path.X=path.width/2;
+path.scale=1.2;
 
-
-//crear sprite rabbit 
-rabbit = createSprite(160,340,20,20);
-rabbit.scale =0.09;
-rabbit.addImage(rabbitImg);
+//crear sprite de boy (niño)
+boy=createSprite(200,230,50,60)
+//agregar animación para boy
+boy.addAnimation("corriendo",boyImg);
+boy.scale=0.08;
+  
+// crear  left Boundary (límite izquierdo)
+leftBoundary=createSprite(0,0,100,800);
+////establecer visibilidad como false (falso) para límite izquierdo
+leftBoundary.visible=false;
+//crear right Boundary (límite derecho)
+rightBoundary=createSprite(410,0,100,800);
+//establecer visibilidad como false (falso) para límite izquierdo
+rightBoundary.visible=false;
 }
 
 function draw() {
   background(0);
+  path.velocityY = 4;
   
-  //mover el sprite rabbit en el eje X con el mouse
-  rabbit.x = World.mouseX;
-  
+  // boy moviéndose en el eje X con el mouse
+  boy.x=World.mouseX
   edges= createEdgeSprites();
-  rabbit.collide(edges);
-  
-   drawSprites();
-   
-  
-// var select_sprites = Math(random(1,3));
-
-// var select_sprites = Math.random(random(1,3));
-
-// var select_sprites = Math.round(1,3);
-
-var select_sprites = Math.round(random(1,3));
-
-  
- // if (frameCount % 50 == 0) {
-   // if (select_sprites == 1) {
-   //   createApples();
-   // } else if (select_sprites == 2) {
-    //  createOrange();
-   // }else {
-      //createRed();
-    //}
-  //}
-
-   if (frameCount % 80 == 0) {
-     if (select_sprites == 1) {
-       createApples();
-     } else if (select_sprites == 2) {
-       createOrange();
-    }
+  boy.collide(edges[3]);
+  // colisión de boy con los límites derecho e izquierdo invisibles 
+ boy.collide(leftBoundary)
+  //código para reiniciar el fondo
+  if(path.y > 400 ){
+    path.y = height/2;
   }
-
-  //if (frameCount / 80 == 0) {
-   // if (select_sprites == 1) {
-   //    createApples();
-   //  } else if (select_sprites == 2) {
-    //   createOrange();
-    // }else {
-    //   createRed();
-   //  }
-  // }
-
-  // if (frameCount % 80 = 0) {
-  //   if (select_sprites == 1) {
-  //     createApples();
-  //   } else if (select_sprites == 2) {
-  //     createOrange();
-  //   }else {
-  //     createRed();
-  //   }
-  // }
-
-
-
-}
-
-function createApples() {
-apple = createSprite(random(50, 350),40, 10, 10);
-apple.addImage(appleImg);
-apple.scale=0.07;
-apple.velocityY = 3;
-apple.lifetime = 150;
   
-}
-
-function createOrange() {
-orangeL = createSprite(random(50, 350),40, 10, 10);
-orangeL.addImage(orangeImg);
-orangeL.scale=0.08;
-orangeL.velocityY = 3;
-orangeL.lifetime = 150;
-}
-
-function createRed() {
-redL = createSprite(random(50, 350),40, 10, 10);
-redL.addImage(redImg);
-redL.scale=0.06;
-  redL.velocityY = 3;
-  redL.lifetime = 150;
+  drawSprites();
 }
